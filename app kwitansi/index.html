@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TokoKu · Kwitansi Otomatis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="logo-container">
+        <img src="logo.svg" class="logo-img">
+        <h1 class="logo-text">TokoKu</h1>
+      </div>
+    </header>
+    <body>
+      <nav class="tabs" role="tablist">
+        <button class="tab active" data-view="belanja" role="tab">Belanja</button>
+        <button class="tab" data-view="riwayat" role="tab">Riwayat kwitansi <span id="badgeRiwayat" class="badge">0</span></button>
+      </nav>
+    </header>
+
+    <!-- ============ VIEW BELANJA ============ -->
+    <main id="view-belanja" class="view layout">
+      <section class="catalog">
+        <div class="catalog-head">
+          <h1>Pilih barang</h1>
+          <input id="search" type="search" placeholder="Cari barang…" aria-label="Cari barang">
+        </div>
+        <div id="productGrid" class="grid"></div>
+      </section>
+
+      <aside class="side">
+        <section class="panel">
+          <h2>Keranjang</h2>
+          <ul id="cartList" class="cart"></ul>
+          <div id="cartEmpty" class="empty">Keranjang masih kosong. Klik “Tambah” pada barang untuk memulai.</div>
+          <dl class="sum" id="cartSum">
+            <div><dt>Subtotal</dt><dd id="sumSubtotal">Rp0</dd></div>
+            <div><dt>PPN 11%</dt><dd id="sumPpn">Rp0</dd></div>
+            <div class="grand"><dt>Total</dt><dd id="sumTotal">Rp0</dd></div>
+          </dl>
+        </section>
+
+        <form id="checkoutForm" class="panel" novalidate>
+          <h2>Data pembeli</h2>
+          <label>Nama lengkap
+            <input name="nama" required autocomplete="name" placeholder="mis. Budi Santoso">
+            <span class="err" data-for="nama"></span>
+          </label>
+          <label>Nomor HP
+            <input name="hp" required inputmode="tel" placeholder="08xxxxxxxxxx">
+            <span class="err" data-for="hp"></span>
+          </label>
+          <label>Alamat
+            <textarea name="alamat" rows="2" required placeholder="Jl. …, Surabaya"></textarea>
+            <span class="err" data-for="alamat"></span>
+          </label>
+          <label>Metode pembayaran
+            <select name="metode">
+              <option>Tunai</option>
+              <option>Transfer Bank</option>
+              <option>QRIS</option>
+              <option>Kartu Debit</option>
+            </select>
+          </label>
+          <button id="btnCheckout" class="btn primary" type="submit">Checkout &amp; buat kwitansi</button>
+        </form>
+      </aside>
+    </main>
+
+    <!-- ============ VIEW RIWAYAT ============ -->
+    <main id="view-riwayat" class="view" hidden>
+      <div class="catalog-head">
+        <h1>Riwayat kwitansi</h1>
+        <button id="btnClear" class="btn ghost danger">Hapus semua riwayat</button>
+      </div>
+      <div class="table-wrap">
+        <table class="history">
+          <thead>
+            <tr><th>No. kwitansi</th><th>Tanggal</th><th>Pembeli</th><th>Metode</th><th class="num">Total</th><th></th></tr>
+          </thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+        <div id="historyEmpty" class="empty">Belum ada transaksi. Kwitansi akan muncul di sini setelah checkout.</div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ============ KWITANSI (modal) ============ -->
+  <dialog id="kwitansiDialog">
+    <div class="dialog-bar no-print">
+      <span>Kwitansi berhasil dibuat</span>
+      <div>
+        <button class="btn primary" id="btnPrint">Cetak / simpan PDF</button>
+        <button class="btn ghost" id="btnClose">Tutup</button>
+      </div>
+    </div>
+    <article id="kwitansi" class="kwitansi"></article>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
